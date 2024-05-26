@@ -254,6 +254,21 @@ char *task8(char *s, int *indices, int length) {
     return result;
 }
 
+void task9(int N) {
+    FILE *input_file = fopen("../input.txt", "r");
+    FILE *output_file = fopen("../output.txt", "w");
+
+    int num;
+    while (fscanf(input_file, "%d", &num) != EOF) {
+        if (num < N) {
+            fprintf(output_file, "%d\n", num);
+        }
+    }
+
+    fclose(input_file);
+    fclose(output_file);
+}
+
 int main() {
 
     return 0;
