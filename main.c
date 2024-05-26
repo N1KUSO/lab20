@@ -4,10 +4,17 @@
 
 #define MAX_SIZE 100
 
-typedef struct {
+typedef struct DomainCount {
     char domain[MAX_SIZE];
     int count;
 } DomainCount;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
 
 void task1(int n, int queries[][4], int queriesSize, int **resultMatrix) {
     for (int i = 0; i < n; ++i) {
@@ -181,7 +188,63 @@ void task6(const char *pattern, char *result) {
     result[index] = '\0';
 }
 
+TreeNode *createNode(int val) {
+    TreeNode *newNode = (TreeNode *) malloc(sizeof(TreeNode));
+    newNode->val = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+int findMaxIndex(int *nums, int start, int end) {
+    int maxIndex = start;
+    for (int i = start + 1; i <= end; i++) {
+        if (nums[i] > nums[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+TreeNode *constructMaximumBinaryTree(int *nums, int start, int end) {
+    if (start > end) {
+        return NULL;
+    }
+    int maxIndex = findMaxIndex(nums, start, end);
+    TreeNode *root = createNode(nums[maxIndex]);
+    root->left = constructMaximumBinaryTree(nums, start, maxIndex - 1);
+    root->right = constructMaximumBinaryTree(nums, maxIndex + 1, end);
+
+    return root;
+}
+
+void task7(TreeNode *root) {
+    if (root == NULL) {
+        return;
+    }
+
+    TreeNode **queue = (TreeNode **) malloc(1000 * sizeof(TreeNode *));
+
+    int front = 0, rear = 0;
+    queue[rear++] = root;
+    hk
+    while (front < rear) {
+        TreeNode *node = queue[front++];
+        if (node) {
+            printf("%d ", node->val);
+            queue[rear++] = node->left;
+            queue[rear++] = node->right;
+        } else {
+            printf("null ");
+        }
+    }
+
+    free(queue);
+    printf("\n");
+}
+
 int main() {
+
     return 0;
 }
 
