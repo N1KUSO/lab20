@@ -15,6 +15,9 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } TreeNode;
 
+typedef struct {
+    char word[2000001];
+} Word;
 
 void task1(int n, int queries[][4], int queriesSize, int **resultMatrix) {
     for (int i = 0; i < n; ++i) {
@@ -256,7 +259,17 @@ char *task8(char *s, int *indices, int length) {
 
 void task9(int N) {
     FILE *input_file = fopen("../input.txt", "r");
+    if (input_file == NULL) {
+        perror("Error opening input file");
+        exit(EXIT_FAILURE);
+    }
+
     FILE *output_file = fopen("../output.txt", "w");
+    if (output_file == NULL) {
+        perror("Error opening output file");
+        fclose(input_file);
+        exit(EXIT_FAILURE);
+    }
 
     int num;
     while (fscanf(input_file, "%d", &num) != EOF) {
@@ -267,6 +280,24 @@ void task9(int N) {
 
     fclose(input_file);
     fclose(output_file);
+}
+
+int compareStr(const void *a, const void *b) {
+    return strcmp(((Word *)a)->word, ((Word *)b)->word);
+}
+
+int task11(Word *dictionary, int n, char *prefix) {
+    int left = 0, right = n - 1, result = -1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (strncmp(dictionary[mid].word, prefix, strlen(prefix)) >= 0) {
+            result = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return result;
 }
 
 int main() {
