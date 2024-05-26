@@ -111,7 +111,7 @@ void task3(int **matrix, int m, int n, int filterSize, int **resultMatrix) {
     }
 }
 
-void addDomainCount(DomainCount* domainCounts, int* domainCountSize, const char* domain, int count) {
+void addDomainCount(DomainCount *domainCounts, int *domainCountSize, const char *domain, int count) {
     for (int i = 0; i < *domainCountSize; ++i) {
         if (strcmp(domainCounts[i].domain, domain) == 0) {
             domainCounts[i].count += count;
@@ -123,10 +123,10 @@ void addDomainCount(DomainCount* domainCounts, int* domainCountSize, const char*
     (*domainCountSize)++;
 }
 
-void task4(char* cpdomain, DomainCount* domainCounts, int* domainCountSize) {
-    char* space = strchr(cpdomain, ' ');
+void task4(char *cpdomain, DomainCount *domainCounts, int *domainCountSize) {
+    char *space = strchr(cpdomain, ' ');
     int count = atoi(cpdomain);
-    char* domain = space + 1;
+    char *domain = space + 1;
 
     addDomainCount(domainCounts, domainCountSize, domain, count);
 
@@ -136,7 +136,35 @@ void task4(char* cpdomain, DomainCount* domainCounts, int* domainCountSize) {
     }
 }
 
+int task5(int **matrix, int m, int n) {
+    int totalCount = 0;
+    int heights[m][n];
+    for (int j = 0; j < n; ++j) {
+        heights[0][j] = matrix[0][j];
+    }
+
+    for (int i = 1; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            heights[i][j] = (matrix[i][j] == 0) ? 0 : heights[i - 1][j] + 1;
+        }
+    }
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int minHeight = heights[i][j];
+            for (int k = j; k >= 0 && minHeight > 0; --k) {
+                minHeight = (heights[i][k] < minHeight) ? heights[i][k] : minHeight;
+                totalCount += minHeight;
+            }
+        }
+    }
+
+    return totalCount;
+}
+
+
 int main() {
+
     return 0;
 }
 
