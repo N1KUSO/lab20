@@ -1,5 +1,13 @@
 #include <stdio.h>
+#include <string.h>
 #include "matrix.h"
+
+#define MAX_SIZE 100
+
+typedef struct {
+    char domain[MAX_SIZE];
+    int count;
+} DomainCount;
 
 void task1(int n, int queries[][4], int queriesSize, int **resultMatrix) {
     for (int i = 0; i < n; ++i) {
@@ -103,8 +111,32 @@ void task3(int **matrix, int m, int n, int filterSize, int **resultMatrix) {
     }
 }
 
-int main() {
+void addDomainCount(DomainCount* domainCounts, int* domainCountSize, const char* domain, int count) {
+    for (int i = 0; i < *domainCountSize; ++i) {
+        if (strcmp(domainCounts[i].domain, domain) == 0) {
+            domainCounts[i].count += count;
+            return;
+        }
+    }
+    strcpy(domainCounts[*domainCountSize].domain, domain);
+    domainCounts[*domainCountSize].count = count;
+    (*domainCountSize)++;
+}
 
+void task4(char* cpdomain, DomainCount* domainCounts, int* domainCountSize) {
+    char* space = strchr(cpdomain, ' ');
+    int count = atoi(cpdomain);
+    char* domain = space + 1;
+
+    addDomainCount(domainCounts, domainCountSize, domain, count);
+
+    while ((domain = strchr(domain, '.')) != NULL) {
+        domain++;
+        addDomainCount(domainCounts, domainCountSize, domain, count);
+    }
+}
+
+int main() {
     return 0;
 }
 
