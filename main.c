@@ -163,9 +163,25 @@ int task5(int **matrix, int m, int n) {
 }
 
 
-int main() {
+void task6(const char *pattern, char *result) {
+    int n = strlen(pattern);
+    int index = 0;
+    int num = 1;
+    int stack[n + 1];
+    int top = -1;
 
-    return 0;
+    for (int i = 0; i <= n; ++i) {
+        stack[++top] = num++;
+        if (i == n || pattern[i] == 'I') {
+            while (top >= 0) {
+                result[index++] = '0' + stack[top--];
+            }
+        }
+    }
+    result[index] = '\0';
 }
 
+int main() {
+    return 0;
+}
 
