@@ -227,7 +227,7 @@ void task7(TreeNode *root) {
 
     int front = 0, rear = 0;
     queue[rear++] = root;
-    hk
+
     while (front < rear) {
         TreeNode *node = queue[front++];
         if (node) {
@@ -241,6 +241,17 @@ void task7(TreeNode *root) {
 
     free(queue);
     printf("\n");
+}
+
+char *task8(char *s, int *indices, int length) {
+    char *result = (char *) malloc((length + 1) * sizeof(char));
+
+    for (int i = 0; i < length; i++) {
+        result[indices[i]] = s[i];
+    }
+
+    result[length] = '\0';
+    return result;
 }
 
 int main() {
