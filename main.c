@@ -73,8 +73,39 @@ void task2(int **board, int m, int n) {
     free(nextBoard);
 }
 
+int compare(const void *a, const void *b) {
+    return (*(int *) a - *(int *) b);
+}
+
+void task3(int **matrix, int m, int n, int filterSize, int **resultMatrix) {
+    int offset = filterSize / 2;
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            resultMatrix[i][j] = matrix[i][j];
+        }
+    }
+
+    for (int i = offset; i < m - offset; ++i) {
+        for (int j = offset; j < n - offset; ++j) {
+            int window[filterSize * filterSize];
+            int k = 0;
+
+            for (int wi = -offset; wi <= offset; ++wi) {
+                for (int wj = -offset; wj <= offset; ++wj) {
+                    window[k++] = matrix[i + wi][j + wj];
+                }
+            }
+            qsort(window, filterSize * filterSize, sizeof(int), compare);
+
+            resultMatrix[i][j] = window[(filterSize * filterSize) / 2];
+        }
+    }
+}
+
 int main() {
 
     return 0;
 }
+
 
