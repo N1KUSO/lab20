@@ -22,7 +22,59 @@ void task1(int n, int queries[][4], int queriesSize, int **resultMatrix) {
     }
 }
 
+int countLiveNeighbors(int **board, int m, int n, int x, int y) {
+    int liveNeighbors = 0;
+    for (int i = -1; i <= 1; ++i) {
+        for (int j = -1; j <= 1; ++j) {
+            if (i == 0 && j == 0) continue;
+            int nx = x + i;
+            int ny = y + j;
+
+            if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+                liveNeighbors += board[nx][ny];
+            }
+        }
+    }
+    return liveNeighbors;
+}
+
+void task2(int **board, int m, int n) {
+    int **nextBoard = (int **) malloc(m * sizeof(int *));
+    for (int i = 0; i < m; ++i) {
+        nextBoard[i] = (int *) malloc(n * sizeof(int));
+    }
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int liveNeighbors = countLiveNeighbors(board, m, n, i, j);
+
+            if (board[i][j] == 1) {
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    nextBoard[i][j] = 0;
+                } else {
+                    nextBoard[i][j] = 1;
+                }
+            } else {
+                if (liveNeighbors == 3) {
+                    nextBoard[i][j] = 1;
+                } else {
+                    nextBoard[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            board[i][j] = nextBoard[i][j];
+        }
+        free(nextBoard[i]);
+    }
+    free(nextBoard);
+}
+
 int main() {
 
     return 0;
 }
+
