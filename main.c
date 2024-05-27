@@ -300,8 +300,219 @@ int task11(Word *dictionary, int n, char *prefix) {
     return result;
 }
 
-int main() {
+void test_task1() {
+    int n = 3;
+    int queries[][4] = {{1, 1, 2, 2}, {0, 0, 1, 1}};
 
+    int **resultMatrix = (int **)malloc(n * sizeof(int *));
+    for (int i = 0; i < n; ++i) {
+        resultMatrix[i] = (int *)malloc(n * sizeof(int));
+    }
+    task1(n, queries, sizeof(queries) / sizeof(queries[0]), resultMatrix);
+
+    int expectedMatrix[][3] = {{1, 1, 0}, {1, 2, 1}, {0, 1, 1}};
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (resultMatrix[i][j] != expectedMatrix[i][j]) {
+                printf("Error! Task 1");
+            }
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        free(resultMatrix[i]);
+    }
+    free(resultMatrix);
+}
+
+void test_task2() {
+    int m = 3;
+    int n = 3;
+    int **board = (int **)malloc(m * sizeof(int *));
+
+    for (int i = 0; i < m; ++i) {
+        board[i] = (int *)malloc(n * sizeof(int));
+        for (int j = 0; j < n; ++j) {
+            board[i][j] = 0;
+        }
+    }
+    board[0][1] = 1;
+    board[1][0] = 1;
+    board[1][1] = 1;
+
+    task2(board, m, n);
+
+    for (int i = 0; i < m; ++i) {
+        free(board[i]);
+    }
+    free(board);
+}
+
+void test_task3() {
+    int m = 3;
+    int n = 3;
+    int filterSize = 3;
+
+    int inputMatrix[3][3] = {
+            {10, 20, 30},
+            {25, 35, 45},
+            {15, 25, 35}
+    };
+
+    int exceptedMatrix[3][3] = {
+            {10, 20, 30},
+            {25, 25, 45},
+            {15, 25, 35}
+    };
+
+    int** matrix = (int**)malloc(m * sizeof(int*));
+    int** resultMatrix = (int**)malloc(m * sizeof(int*));
+
+    for (int i = 0; i < m; ++i) {
+        matrix[i] = (int*)malloc(n * sizeof(int));
+        resultMatrix[i] = (int*)malloc(n * sizeof(int));
+
+        for (int j = 0; j < n; ++j) {
+            matrix[i][j] = inputMatrix[i][j];
+        }
+    }
+
+    task3(matrix, m, n, filterSize, resultMatrix);
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (resultMatrix[i][j] != exceptedMatrix[i][j]) {
+                printf("Error! Task 3");
+            }
+        }
+    }
+
+    for (int i = 0; i < m; ++i) {
+        free(matrix[i]);
+        free(resultMatrix[i]);
+    }
+    free(matrix);
+    free(resultMatrix);
+}
+
+void test_task4() {
+    char* cpdomains[] = {"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"};
+    int cpdomainsSize = sizeof(cpdomains) / sizeof(cpdomains[0]);
+
+    DomainCount domainCounts[MAX_SIZE];
+    DomainCount excepted[MAX_SIZE] = {
+            {"google.mail.com", 900},
+            {"mail.com", 901},
+            {"com", 951},
+            {"yahoo.com", 50},
+            {"intel.mail.com", 1},
+            {"wiki.org", 5},
+            {"org", 5},
+    };
+    int domainCountSize = 0;
+
+    for (int i = 0; i < cpdomainsSize; ++i) {
+        task4(cpdomains[i], domainCounts, &domainCountSize);
+    }
+
+    for (int i = 0; i < domainCountSize; ++i) {
+        if(domainCounts[i].count != excepted[i].count || strcmp(domainCounts[i].domain, excepted[i].domain)) {
+            printf("Error! Task 4");
+        }
+    }
+}
+
+void test_task5() {
+    int m = 3, n = 3;
+    int matrixData[3][3] = {
+            {1, 0, 1},
+            {1, 1, 0},
+            {1, 1, 0}
+    };
+
+    int** matrix = (int**)malloc(m * sizeof(int*));
+    for (int i = 0; i < m; ++i) {
+        matrix[i] = (int*)malloc(n * sizeof(int));
+        for (int j = 0; j < n; ++j) {
+            matrix[i][j] = matrixData[i][j];
+        }
+    }
+
+    int result = task5(matrix, m, n);
+    if(result != 13) {
+        printf("Error! Task 5");
+    }
+
+    for (int i = 0; i < m; ++i) {
+        free(matrix[i]);
+    }
+    free(matrix);
+}
+
+void test_task6() {
+    const char* pattern1 = "IIIDIDDD";
+    char result1[10];
+    task6(pattern1, result1);
+    assert(strcmp(result1, "12349876"));
+
+    const char* pattern2 = "DDD";
+    char result2[5];
+    task6(pattern2, result2);
+    assert(strcmp(result1, "4321"));
+}
+
+void test_task7() {
+    int nums1[] = {3, 2, 1, 6, 0, 5};
+    int size1 = sizeof(nums1) / sizeof(nums1[0]);
+    struct TreeNode* root1 = constructMaximumBinaryTree(nums1, 0, size1 - 1);
+    task7(root1);
+
+    int nums2[] = {3, 2, 1};
+    int size2 = sizeof(nums2) / sizeof(nums2[0]);
+    struct TreeNode* root2 = constructMaximumBinaryTree(nums2, 0, size2 - 1);
+    task7(root2);
+}
+
+void test_task8() {
+    char s1[] = "abc";
+    int indices1[] = {0, 1, 2};
+    int length1 = sizeof(indices1) / sizeof(indices1[0]);
+    char* result1 = task8(s1, indices1, length1);
+    assert(!strcmp(result1, "abc"));
+    free(result1);
+
+    char s2[] = "abap";
+    int indices2[] = {0, 3, 2, 1};
+    int length2 = sizeof(indices2) / sizeof(indices2[0]);
+    char* result2 = task8(s2, indices2, length2);
+    assert(!strcmp(result2, "apab"));
+    free(result2);
+}
+
+void test_task9() {
+    FILE *output = fopen("../output.txt", "r");
+
+    task9(10);
+
+    int x;
+    if(fscanf(output, "%d", &x) != EOF) {
+        if(x != 9) {
+            printf("Error! Task 9");
+        }
+    }
+}
+
+int main() {
+    test_task1();
+    test_task2();
+    test_task3();
+    test_task4();
+    test_task5();
+    test_task6();
+    test_task7();
+    test_task8();
+    test_task9();
     return 0;
 }
 
